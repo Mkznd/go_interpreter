@@ -92,7 +92,7 @@ func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {
 		res += string(s[pos])
 	}
 
-	if s[pos] != '"' {
+	if pos >= len(s) {
 		return Token{}, pos, errors.New(l.errors.unterminatedString)
 	}
 	return NewToken("STRING", res+"\"", strings.TrimPrefix(res, "\"")), pos, nil
