@@ -19,17 +19,17 @@ func (p Parser) Scan(buf []byte) {
 	lines := strings.Split(string(buf[:]), "\n")
 	for i, line := range lines {
 		for pos := 0; pos < len(line); pos++ {
-			lexeme, newPos, err := p.lexemes.ResolveLexems(line, pos)
-			if lexeme == "//" {
-				break
-			}
-			pos = newPos
+			token, newPos, err := p.lexemes.ResolveLexems(line, pos)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, lexeme)
+				fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, token.Lexeme)
 				code = 65
 				continue
 			}
-			fmt.Println(p.lexemes.Lexemes[lexeme], lexeme, "null")
+			if token.Lexeme == "//" {
+				break
+			}
+			pos = newPos
+			fmt.Println(token.TokenType, token.Lexeme, token.Literal)
 		}
 	}
 	fmt.Println("EOF  null")

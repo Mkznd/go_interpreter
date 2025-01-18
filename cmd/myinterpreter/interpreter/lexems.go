@@ -43,26 +43,59 @@ func NewLexemes(errors Errors) Lexemes {
 	}
 }
 
-func (l Lexemes) ResolveLexems(line string, pos int) (string, int, error) {
+type Token struct {
+	TokenType string
+	Lexeme    string
+	Literal   string
+}
+
+func NewToken(tokenType string, lexeme string, literal string) Token {
+	return Token{
+		TokenType: tokenType,
+		Lexeme:    lexeme,
+		Literal:   literal,
+	}
+}
+
+func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
+	if currentLexeme == "\"" {
+		return l.ExtractStringLiteral(line, pos)
+	}
 	var count int
 	for count = CountPrefixInMapKeys(l.Lexemes, currentLexeme); count > 1; count = CountPrefixInMapKeys(l.Lexemes, currentLexeme) {
 		if pos += 1; pos > len(line)-1 {
 			if _, found := l.Lexemes[currentLexeme]; found {
-				return currentLexeme, pos, nil
+				return NewToken(l.Lexemes[currentLexeme], currentLexeme, "null"), pos, nil
 			}
-			return currentLexeme, pos, errors.New(l.errors.unexpectedChar)
+			return Token{Lexeme: currentLexeme}, pos, errors.New(l.errors.unexpectedChar)
 		}
 		currentLexeme = currentLexeme + string(line[pos])
 	}
+
 	if count == 0 {
 		previousLexeme := currentLexeme[:len(currentLexeme)-1]
 		if _, found := l.Lexemes[previousLexeme]; found {
-			return previousLexeme, pos - 1, nil
+			return NewToken(l.Lexemes[previousLexeme], previousLexeme, "null"), pos - 1, nil
 		}
-		return currentLexeme, pos, errors.New(l.errors.unexpectedChar)
+		return Token{Lexeme: currentLexeme}, pos, errors.New(l.errors.unexpectedChar)
 	}
-	return currentLexeme, pos, nil
+	return NewToken(l.Lexemes[currentLexeme], currentLexeme, "null"), pos, nil
+}
+
+func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {
+	if s[pos] != '"' {
+		return Token{}, pos + 1, errors.New(l.errors.unexpectedChar)
+	}
+	res := "\""
+	for pos = pos + 1; pos < len(s) && s[pos] != '"'; pos++ {
+		res += string(s[pos])
+	}
+
+	if s[pos] != '"' {
+		return Token{}, pos, errors.New(l.errors.unterminatedString)
+	}
+	return NewToken("STRING", res+"\"", strings.TrimPrefix(res, "\"")), pos, nil
 }
 
 func CountPrefixInMapKeys(m LexemsMap, prefix string) int {
