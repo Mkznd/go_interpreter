@@ -6,5 +6,5 @@ type Errors struct {
 }
 
 func NewErrors() Errors {
-	return Errors{unexpectedChar: "Unexpected character", unterminatedString: "Unterminated string"}
+	return Errors{unexpectedChar: "Unexpected character", unterminatedString: "Unterminated string."}
 }
