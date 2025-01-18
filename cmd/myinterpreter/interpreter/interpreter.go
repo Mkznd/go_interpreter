@@ -29,6 +29,9 @@ func (p Parser) Scan(buf []byte) {
 					break
 				}
 			}
+			if token.Lexeme == "" {
+				break
+			}
 			if token.Lexeme == "//" {
 				break
 			}
