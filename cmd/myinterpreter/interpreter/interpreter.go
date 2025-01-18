@@ -21,9 +21,15 @@ func (p Parser) Scan(buf []byte) {
 		for pos := 0; pos < len(line); pos++ {
 			token, newPos, err := p.lexemes.ResolveLexems(line, pos)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, token.Lexeme)
-				code = 65
-				continue
+				if err.Error() == p.errors.unexpectedChar {
+					fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, token.Lexeme)
+					code = 65
+					continue
+				} else if err.Error() == p.errors.unterminatedString {
+					fmt.Fprintf(os.Stderr, "[line %d] Error: %s\n", i+1, p.errors.unterminatedString)
+					code = 65
+					break
+				}
 			}
 			if token.Lexeme == "//" {
 				break

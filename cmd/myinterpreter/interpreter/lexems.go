@@ -85,7 +85,7 @@ func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 
 func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {
 	if s[pos] != '"' {
-		return Token{}, pos + 1, errors.New(l.errors.unexpectedChar)
+		return Token{Lexeme: string(s[pos])}, pos, errors.New(l.errors.unexpectedChar)
 	}
 	res := "\""
 	for pos = pos + 1; pos < len(s) && s[pos] != '"'; pos++ {
@@ -93,7 +93,7 @@ func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {
 	}
 
 	if pos >= len(s) {
-		return Token{}, pos, errors.New(l.errors.unterminatedString)
+		return Token{Lexeme: res}, pos, errors.New(l.errors.unterminatedString)
 	}
 	return NewToken("STRING", res+"\"", strings.TrimPrefix(res, "\"")), pos, nil
 }
