@@ -23,7 +23,10 @@ func (p Parser) Scan(buf []byte) {
 			} else if slices.Contains(p.ignore, string(letter)) {
 				continue
 			} else {
-				fmt.Printf("[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, string(letter))
+				_, err := fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, string(letter))
+				if err != nil {
+					return
+				}
 				code = 65
 			}
 		}
