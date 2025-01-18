@@ -29,6 +29,10 @@ func NewLexemes(errors Errors) Lexemes {
 		"==": "EQUAL_EQUAL",
 		"!":  "BANG",
 		"!=": "BANG_EQUAL",
+		"<":  "LESS",
+		">":  "GREATER",
+		"<=": "LESS_EQUAL",
+		">=": "GREATER_EQUAL",
 	}
 
 	return Lexemes{
