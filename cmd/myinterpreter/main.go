@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/codecrafters-io/interpreter-starter-go/di"
 	"os"
 )
 
 func main() {
+
 	if len(os.Args) < 3 {
 		fmt.Fprintln(os.Stderr, "Usage: ./your_program.sh tokenize <filename>")
 		os.Exit(1)
@@ -18,7 +20,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	//Uncomment this block to pass the first stage
+	parser, err := di.InitializeParser()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error initializing the parser: %v\n", err)
+		os.Exit(1)
+	}
 
 	filename := os.Args[2]
 	fileContents, err := os.ReadFile(filename)
@@ -27,7 +33,7 @@ func main() {
 		os.Exit(1)
 	}
 	if len(fileContents) > 0 {
-		panic("Scanner not implemented")
+		parser.ScanParentheses(fileContents)
 	} else {
 		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
 	}
