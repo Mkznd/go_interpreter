@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"errors"
+	"slices"
 	"strings"
 )
 
@@ -10,9 +11,10 @@ type LexemsMap = map[string]string
 type Lexemes struct {
 	Lexemes LexemsMap
 	errors  Errors
+	ignore  []string
 }
 
-func NewLexemes(errors Errors) Lexemes {
+func NewLexemes(errors Errors, ignore []string) Lexemes {
 	m := LexemsMap{
 		"(":  "LEFT_PAREN",
 		")":  "RIGHT_PAREN",
@@ -40,6 +42,7 @@ func NewLexemes(errors Errors) Lexemes {
 	return Lexemes{
 		Lexemes: m,
 		errors:  errors,
+		ignore:  ignore,
 	}
 }
 
@@ -59,6 +62,10 @@ func NewToken(tokenType string, lexeme string, literal string) Token {
 
 func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
+	for slices.Contains(l.ignore, currentLexeme) == true {
+		pos += 1
+		currentLexeme = string(line[pos])
+	}
 	if currentLexeme == "\"" {
 		return l.ExtractStringLiteral(line, pos)
 	}
