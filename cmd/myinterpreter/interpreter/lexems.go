@@ -62,7 +62,7 @@ func NewToken(tokenType string, lexeme string, literal string) Token {
 
 func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
-	for slices.Contains(l.ignore, currentLexeme) == true {
+	for slices.Contains(l.ignore, currentLexeme) == true && pos < len(line) {
 		pos += 1
 		currentLexeme = string(line[pos])
 	}
