@@ -65,6 +65,7 @@ func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	matched, _ := regexp.MatchString(`\s`, currentLexeme)
 	for matched && pos < len(line)-1 {
 		pos++
+		currentLexeme = string(line[pos])
 		matched, _ = regexp.MatchString(`\s`, currentLexeme)
 	}
 
