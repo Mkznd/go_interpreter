@@ -48,9 +48,9 @@ func (l Lexemes) ResolveLexems(line string, pos int) (string, int, error) {
 		currentLexeme = currentLexeme + string(line[pos])
 	}
 	if count == 0 {
+		currentLexeme = currentLexeme[:len(currentLexeme)-1]
 		if _, found := l.Lexemes[currentLexeme]; found {
-			lexeme := l.Lexemes[currentLexeme]
-			return lexeme[:len(lexeme)-1], pos, nil
+			return currentLexeme, pos, nil
 		}
 		return "", pos, errors.New(l.errors.unexpectedChar)
 	}

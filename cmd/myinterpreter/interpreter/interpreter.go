@@ -27,6 +27,7 @@ func (p Parser) Scan(buf []byte) {
 			}
 			fmt.Println(p.lexemes.Lexemes[lexeme], lexeme, "null")
 		}
+		fmt.Println("---------------")
 	}
 	fmt.Println("EOF  null")
 	os.Exit(code)
