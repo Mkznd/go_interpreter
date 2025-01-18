@@ -20,6 +20,9 @@ func (p Parser) Scan(buf []byte) {
 	for i, line := range lines {
 		for pos := 0; pos < len(line); pos++ {
 			lexeme, newPos, err := p.lexemes.ResolveLexems(line, pos)
+			if lexeme == "//" {
+				break
+			}
 			pos = newPos
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, lexeme)

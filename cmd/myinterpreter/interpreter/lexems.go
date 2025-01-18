@@ -33,6 +33,8 @@ func NewLexemes(errors Errors) Lexemes {
 		">":  "GREATER",
 		"<=": "LESS_EQUAL",
 		">=": "GREATER_EQUAL",
+		"/":  "SLASH",
+		"//": "COMMENT",
 	}
 
 	return Lexemes{
