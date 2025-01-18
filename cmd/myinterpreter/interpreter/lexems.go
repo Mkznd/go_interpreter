@@ -63,7 +63,7 @@ func NewToken(tokenType string, lexeme string, literal string) Token {
 func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
 	matched, _ := regexp.MatchString(`\s`, currentLexeme)
-	for matched {
+	for matched && pos < len(line) {
 		pos++
 		currentLexeme = string(line[pos])
 		matched, _ = regexp.MatchString(`\s`, currentLexeme)
