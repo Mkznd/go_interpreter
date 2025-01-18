@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"fmt"
+	"os"
 	"slices"
 	"strings"
 )
@@ -13,6 +14,7 @@ type Parser struct {
 }
 
 func (p Parser) Scan(buf []byte) {
+	code := 0
 	lines := strings.Split(string(buf[:]), "\n")
 	for i, line := range lines {
 		for _, letter := range line {
@@ -22,10 +24,12 @@ func (p Parser) Scan(buf []byte) {
 				continue
 			} else {
 				fmt.Printf("[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, string(letter))
+				code = 65
 			}
 		}
 	}
 	fmt.Println("EOF  null")
+	os.Exit(code)
 }
 
 func NewParser(lexems Lexems, errors Errors, ignore []string) Parser {
