@@ -27,6 +27,8 @@ func NewLexemes(errors Errors) Lexemes {
 		":":  "COLON",
 		"=":  "EQUAL",
 		"==": "EQUAL_EQUAL",
+		"!":  "BANG",
+		"!=": "BANG_EQUAL",
 	}
 
 	return Lexemes{
