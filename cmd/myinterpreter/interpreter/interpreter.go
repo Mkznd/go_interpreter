@@ -24,6 +24,7 @@ func (p Parser) Scan(buf []byte) {
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, lexeme)
 				code = 65
+				continue
 			}
 			fmt.Println(p.lexemes.Lexemes[lexeme], lexeme, "null")
 		}
