@@ -50,7 +50,7 @@ func (l Lexemes) ResolveLexems(line string, pos int) (string, int, error) {
 	if count == 0 {
 		currentLexeme = currentLexeme[:len(currentLexeme)-1]
 		if _, found := l.Lexemes[currentLexeme]; found {
-			return currentLexeme, pos, nil
+			return currentLexeme, pos - 1, nil
 		}
 		return "", pos, errors.New(l.errors.unexpectedChar)
 	}
