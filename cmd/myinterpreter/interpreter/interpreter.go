@@ -17,6 +17,7 @@ func (p Parser) Scan(buf []byte) {
 	for i, line := range lines {
 		for pos := 0; pos < len(line); pos++ {
 			token, newPos, err := p.lexemes.ResolveLexems(line, pos)
+			pos = newPos
 			if err != nil {
 				if err.Error() == p.errors.unexpectedChar {
 					fmt.Fprintf(os.Stderr, "[line %d] Error: %s: %s\n", i+1, p.errors.unexpectedChar, token.Lexeme)
@@ -31,7 +32,6 @@ func (p Parser) Scan(buf []byte) {
 			if token.Lexeme == "//" {
 				break
 			}
-			pos = newPos
 			fmt.Println(token.TokenType, token.Lexeme, token.Literal)
 		}
 	}
