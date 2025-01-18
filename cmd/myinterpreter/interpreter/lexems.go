@@ -43,7 +43,7 @@ func (l Lexemes) ResolveLexems(line string, pos int) (string, int, error) {
 			if _, found := l.Lexemes[currentLexeme]; found {
 				return currentLexeme, pos, nil
 			}
-			return "", pos, errors.New(l.errors.unexpectedChar)
+			return currentLexeme, pos, errors.New(l.errors.unexpectedChar)
 		}
 		currentLexeme = currentLexeme + string(line[pos])
 	}
@@ -52,7 +52,7 @@ func (l Lexemes) ResolveLexems(line string, pos int) (string, int, error) {
 		if _, found := l.Lexemes[currentLexeme]; found {
 			return currentLexeme, pos - 1, nil
 		}
-		return "", pos, errors.New(l.errors.unexpectedChar)
+		return currentLexeme, pos, errors.New(l.errors.unexpectedChar)
 	}
 	return currentLexeme, pos, nil
 }
