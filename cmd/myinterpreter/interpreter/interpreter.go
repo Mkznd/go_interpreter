@@ -10,6 +10,11 @@ func NewLexems() Lexems {
 		")": "RIGHT_PAREN",
 		"{": "LEFT_BRACE",
 		"}": "RIGHT_BRACE",
+		"*": "STAR",
+		".": "DOT",
+		",": "COMMA",
+		"+": "PLUS",
+		"-": "MINUS",
 	}
 }
 
