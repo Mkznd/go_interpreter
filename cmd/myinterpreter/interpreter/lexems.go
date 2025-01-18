@@ -15,5 +15,6 @@ func NewLexems() Lexems {
 		"-": "MINUS",
 		";": "SEMICOLON",
 		":": "COLON",
+		"=": "EQUAL",
 	}
 }
