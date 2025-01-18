@@ -1,26 +1,33 @@
 package interpreter
 
+import "fmt"
+
 type Lexems = map[string]string
 
 func NewLexems() Lexems {
 	return Lexems{
 		"(": "LEFT_PAREN",
 		")": "RIGHT_PAREN",
+		"{": "LEFT_BRACE",
+		"}": "RIGHT_BRACE",
 	}
 }
 
 type Parser struct {
-	lexems             Lexems
-	parenthesesScanner ParenthesesScanner
+	lexems Lexems
 }
 
-func (p Parser) ScanParentheses(buf []byte) {
-	p.parenthesesScanner.scan(buf)
+func (p Parser) Scan(buf []byte) {
+	for _, letter := range buf {
+		if value, found := p.lexems[string(letter)]; found {
+			fmt.Println(value, string(letter), "null")
+		}
+	}
+	fmt.Println("EOF  null")
 }
 
-func NewParser(lexems Lexems, parenthesesScanner ParenthesesScanner) Parser {
+func NewParser(lexems Lexems) Parser {
 	return Parser{
-		lexems:             lexems,
-		parenthesesScanner: parenthesesScanner,
+		lexems: lexems,
 	}
 }

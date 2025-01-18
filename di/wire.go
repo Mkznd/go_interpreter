@@ -9,6 +9,6 @@ import (
 )
 
 func InitializeParser() (interpreter.Parser, error) {
-	wire.Build(interpreter.NewParser, interpreter.NewParenthesesScanner, interpreter.NewLexems)
+	wire.Build(interpreter.NewParser, interpreter.NewLexems)
 	return interpreter.Parser{}, nil
 }

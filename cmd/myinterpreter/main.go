@@ -33,7 +33,7 @@ func main() {
 		os.Exit(1)
 	}
 	if len(fileContents) > 0 {
-		parser.ScanParentheses(fileContents)
+		parser.Scan(fileContents)
 	} else {
 		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
 	}

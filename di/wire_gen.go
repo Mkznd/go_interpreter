@@ -14,7 +14,6 @@ import (
 
 func InitializeParser() (interpreter.Parser, error) {
 	v := interpreter.NewLexems()
-	parenthesesScanner := interpreter.NewParenthesesScanner(v)
-	parser := interpreter.NewParser(v, parenthesesScanner)
+	parser := interpreter.NewParser(v)
 	return parser, nil
 }
