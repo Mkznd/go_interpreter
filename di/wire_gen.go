@@ -13,9 +13,9 @@ import (
 // Injectors from wire.go:
 
 func InitializeParser() (interpreter.Parser, error) {
-	v := interpreter.NewLexems()
 	errors := interpreter.NewErrors()
-	v2 := interpreter.NewIgnoreList()
-	parser := interpreter.NewParser(v, errors, v2)
+	lexemes := interpreter.NewLexemes(errors)
+	v := interpreter.NewIgnoreList()
+	parser := interpreter.NewParser(lexemes, errors, v)
 	return parser, nil
 }
