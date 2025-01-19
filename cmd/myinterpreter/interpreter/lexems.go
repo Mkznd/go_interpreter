@@ -125,7 +125,7 @@ func (l Lexemes) ExtractNumberLiteral(s string, pos int) (Token, int, error) {
 	}
 	if hadDot {
 		literal := strings.TrimRight(res, "0")
-		if literal[:len(literal)-1] == "." {
+		if literal[len(literal)-1] == '.' {
 			literal += "0"
 		}
 		return NewToken("NUMBER", res, literal), pos, nil
