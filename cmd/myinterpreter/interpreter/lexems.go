@@ -69,7 +69,9 @@ func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	if matched && pos == len(line)-1 {
 		return Token{}, pos, nil
 	}
-
+	if isNumber(currentLexeme) {
+		return l.ExtractNumberLiteral(line, pos)
+	}
 	if currentLexeme == "\"" {
 		return l.ExtractStringLiteral(line, pos)
 	}
@@ -102,6 +104,19 @@ func (l Lexemes) skipWhitespaces(line string, pos int, whitespaces []string, cur
 		matched = slices.Contains(whitespaces, currentLexeme)
 	}
 	return matched, currentLexeme, pos
+}
+
+func (l Lexemes) ExtractNumberLiteral(s string, pos int) (Token, int, error) {
+	if !IsDigit(rune(s[pos])) {
+		return Token{Lexeme: string(s[pos])}, pos, errors.New(l.errors.unexpectedChar)
+	}
+
+	res := string(s[pos])
+	for pos = pos + 1; pos < len(s) && IsDigit(rune(s[pos])); pos++ {
+		res += string(s[pos])
+	}
+
+	return NewToken("NUMBER", res, res+".0"), pos, nil
 }
 
 func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {

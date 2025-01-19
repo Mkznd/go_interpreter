@@ -42,7 +42,7 @@ func (p Parser) Scan(buf []byte) {
 	}
 	fmt.Println("EOF  null")
 	elapsed := time.Since(start)
-	fmt.Printf("Execution time: %d milliseconds\n", elapsed.Milliseconds())
+	fmt.Fprintln(os.Stderr, "Parsing took", elapsed.Nanoseconds(), "nanosecs")
 	os.Exit(code)
 }
 
