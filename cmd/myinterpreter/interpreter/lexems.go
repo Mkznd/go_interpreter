@@ -107,16 +107,27 @@ func (l Lexemes) skipWhitespaces(line string, pos int, whitespaces []string, cur
 }
 
 func (l Lexemes) ExtractNumberLiteral(s string, pos int) (Token, int, error) {
+	hadDot := false
 	if !IsDigit(rune(s[pos])) {
 		return Token{Lexeme: string(s[pos])}, pos, errors.New(l.errors.unexpectedChar)
 	}
 
 	res := string(s[pos])
-	for pos = pos + 1; pos < len(s) && IsDigit(rune(s[pos])); pos++ {
-		res += string(s[pos])
+	for pos = pos + 1; pos < len(s); pos++ {
+		if IsDigit(rune(s[pos])) {
+			res += string(s[pos])
+		} else if s[pos] == '.' && !hadDot {
+			res += "."
+			hadDot = true
+		} else {
+			break
+		}
 	}
-
-	return NewToken("NUMBER", res, res+".0"), pos, nil
+	if !hadDot {
+		return NewToken("NUMBER", res, res+".0"), pos, nil
+	} else {
+		return NewToken("NUMBER", res, res), pos, nil
+	}
 }
 
 func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {
