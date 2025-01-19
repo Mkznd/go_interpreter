@@ -128,9 +128,9 @@ func (l Lexemes) ExtractNumberLiteral(s string, pos int) (Token, int, error) {
 		if literal[len(literal)-1] == '.' {
 			literal += "0"
 		}
-		return NewToken("NUMBER", res, literal), pos, nil
+		return NewToken("NUMBER", res, literal), pos - 1, nil
 	} else {
-		return NewToken("NUMBER", res, res+".0"), pos, nil
+		return NewToken("NUMBER", res, res+".0"), pos - 1, nil
 	}
 }
 
