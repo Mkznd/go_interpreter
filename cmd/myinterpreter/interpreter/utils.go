@@ -21,14 +21,23 @@ func IsNumber(s string) bool {
 	return true
 }
 
-func IsIdentifierSymbol(s rune) bool {
+func IsIdentifierStartingSymbol(s rune) bool {
 	allowedSymbols := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
 
 	return slices.Contains([]rune(allowedSymbols), s)
 }
 
+func IsIdentifierSymbol(s rune) bool {
+	allowedSymbols := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890"
+
+	return slices.Contains([]rune(allowedSymbols), s)
+}
+
 func IsIdentifier(s string) bool {
-	for _, l := range s {
+	if len(s) == 0 || !IsIdentifierStartingSymbol(rune(s[0])) {
+		return false
+	}
+	for _, l := range s[1:] {
 		if !IsIdentifierSymbol(l) {
 			return false
 		}
