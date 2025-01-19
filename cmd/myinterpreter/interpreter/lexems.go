@@ -69,11 +69,14 @@ func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	if matched && pos == len(line)-1 {
 		return Token{}, pos, nil
 	}
-	if isNumber(currentLexeme) {
+	if IsNumber(currentLexeme) {
 		return l.ExtractNumberLiteral(line, pos)
 	}
 	if currentLexeme == "\"" {
 		return l.ExtractStringLiteral(line, pos)
+	}
+	if IsIdentifier(currentLexeme) {
+		return l.ExtractIdentifierLiteral(line, pos)
 	}
 	var count int
 	for count = CountPrefixInMapKeys(l.Lexemes, currentLexeme); count > 1; count = CountPrefixInMapKeys(l.Lexemes, currentLexeme) {
@@ -104,6 +107,18 @@ func (l Lexemes) skipWhitespaces(line string, pos int, whitespaces []string, cur
 		matched = slices.Contains(whitespaces, currentLexeme)
 	}
 	return matched, currentLexeme, pos
+}
+
+func (l Lexemes) ExtractIdentifierLiteral(s string, pos int) (Token, int, error) {
+	if !IsIdentifierSymbol(rune(s[pos])) {
+		return Token{Lexeme: string(s[pos])}, pos, errors.New(l.errors.unexpectedChar)
+	}
+	res := string(s[pos])
+	for pos = pos + 1; pos < len(s) && IsIdentifierSymbol(rune(s[pos])); pos++ {
+		res += string(s[pos])
+	}
+
+	return NewToken("IDENTIFIER", res, "null"), pos - 1, nil
 }
 
 func (l Lexemes) ExtractNumberLiteral(s string, pos int) (Token, int, error) {
