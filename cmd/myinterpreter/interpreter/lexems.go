@@ -25,20 +25,6 @@ func NewLexemes(errors Errors, ignore []string) Lexemes {
 	}
 }
 
-type Token struct {
-	TokenType string
-	Lexeme    string
-	Literal   string
-}
-
-func NewToken(tokenType string, lexeme string, literal string) Token {
-	return Token{
-		TokenType: tokenType,
-		Lexeme:    lexeme,
-		Literal:   literal,
-	}
-}
-
 func (l Lexemes) ResolveLexemes(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
 	whitespaces := []string{

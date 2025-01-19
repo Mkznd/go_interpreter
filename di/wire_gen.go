@@ -12,10 +12,10 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeParser() (interpreter.Parser, error) {
+func InitializeTokenizer() (interpreter.Tokenizer, error) {
 	errors := interpreter.NewErrors()
 	v := interpreter.NewIgnoreList()
 	lexemes := interpreter.NewLexemes(errors, v)
-	parser := interpreter.NewParser(lexemes, errors, v)
+	parser := interpreter.NewTokenizer(lexemes, errors, v)
 	return parser, nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/codecrafters-io/interpreter-starter-go/di"
 	"os"
+	"slices"
 )
 
 func main() {
@@ -14,15 +15,18 @@ func main() {
 	}
 
 	command := os.Args[1]
+	allowedCommands := []string{
+		"tokenize",
+	}
 
-	if command != "tokenize" {
+	if !slices.Contains(allowedCommands, command) {
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
 		os.Exit(1)
 	}
 
-	parser, err := di.InitializeParser()
+	tokenizer, err := di.InitializeTokenizer()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error initializing the parser: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error initializing the tokenizer: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -33,7 +37,12 @@ func main() {
 		os.Exit(1)
 	}
 	if len(fileContents) > 0 {
-		parser.Scan(fileContents)
+		switch command {
+		case "tokenize":
+			tokens, code := tokenizer.Tokenize(fileContents)
+			tokenizer.Display(tokens, os.Stdout)
+			os.Exit(code)
+		}
 	} else {
 		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
 	}
