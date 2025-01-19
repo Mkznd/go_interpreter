@@ -2,7 +2,7 @@ package interpreter
 
 import (
 	"errors"
-	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -62,12 +62,10 @@ func NewToken(tokenType string, lexeme string, literal string) Token {
 
 func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
-	matched, _ := regexp.MatchString(`[\s\r]`, currentLexeme)
-	for matched && pos < len(line)-1 {
-		pos++
-		currentLexeme = string(line[pos])
-		matched, _ = regexp.MatchString(`[\s\r]`, currentLexeme)
+	whitespaces := []string{
+		" ", "\n", "\r", "\t",
 	}
+	matched, currentLexeme, pos := l.skipWhitespaces(line, pos, whitespaces, currentLexeme)
 	if matched && pos == len(line)-1 {
 		return Token{}, pos, nil
 	}
@@ -94,6 +92,16 @@ func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
 		return Token{Lexeme: currentLexeme}, pos, errors.New(l.errors.unexpectedChar)
 	}
 	return NewToken(l.Lexemes[currentLexeme], currentLexeme, "null"), pos, nil
+}
+
+func (l Lexemes) skipWhitespaces(line string, pos int, whitespaces []string, currentLexeme string) (bool, string, int) {
+	matched := slices.Contains(whitespaces, currentLexeme)
+	for matched && pos < len(line)-1 {
+		pos++
+		currentLexeme = string(line[pos])
+		matched = slices.Contains(whitespaces, currentLexeme)
+	}
+	return matched, currentLexeme, pos
 }
 
 func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {

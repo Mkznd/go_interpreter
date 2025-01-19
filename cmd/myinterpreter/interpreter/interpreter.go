@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 type Parser struct {
@@ -13,6 +14,7 @@ type Parser struct {
 
 func (p Parser) Scan(buf []byte) {
 	code := 0
+	start := time.Now()
 	lines := strings.Split(string(buf[:]), "\n")
 	for i, line := range lines {
 		for pos := 0; pos < len(line); pos++ {
@@ -39,6 +41,8 @@ func (p Parser) Scan(buf []byte) {
 		}
 	}
 	fmt.Println("EOF  null")
+	elapsed := time.Since(start)
+	fmt.Printf("Execution time: %d milliseconds\n", elapsed.Milliseconds())
 	os.Exit(code)
 }
 
