@@ -118,7 +118,7 @@ func (l Lexemes) ExtractIdentifierLiteral(s string, pos int) (Token, int, error)
 		res += string(s[pos])
 	}
 
-	return NewToken("IDENTIFIER", res, "null"), pos, nil
+	return NewToken("IDENTIFIER", res, "null"), pos - 1, nil
 }
 
 func (l Lexemes) ExtractNumberLiteral(s string, pos int) (Token, int, error) {

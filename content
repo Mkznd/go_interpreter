@@ -1,1 +1,6 @@
-_1236az foo world_ _hello f00
+str1 = "Test"
+str2 = "Case"
+num1 = 10
+num2 = 200.00
+result = (str1 == str2) != ((num1 + num2) >= 300)
+}
