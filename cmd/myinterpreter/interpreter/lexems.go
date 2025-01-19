@@ -10,10 +10,9 @@ type Lexemes struct {
 	Lexemes       LexemesMap
 	ReservedWords LexemesMap
 	errors        Errors
-	ignore        []string
 }
 
-func NewLexemes(errors Errors, ignore []string) Lexemes {
+func NewLexemes(errors Errors) Lexemes {
 	m := GetMiscLexemes()
 	reservedWords := GetReservedWords()
 
@@ -21,7 +20,6 @@ func NewLexemes(errors Errors, ignore []string) Lexemes {
 		Lexemes:       m,
 		ReservedWords: reservedWords,
 		errors:        errors,
-		ignore:        ignore,
 	}
 }
 

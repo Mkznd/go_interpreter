@@ -12,10 +12,11 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeTokenizer() (interpreter.Tokenizer, error) {
+func InitializeInterpreter() (interpreter.Interpreter, error) {
 	errors := interpreter.NewErrors()
-	v := interpreter.NewIgnoreList()
-	lexemes := interpreter.NewLexemes(errors, v)
-	parser := interpreter.NewTokenizer(lexemes, errors, v)
-	return parser, nil
+	lexemes := interpreter.NewLexemes(errors)
+	tokenizer := interpreter.NewTokenizer(lexemes, errors)
+	parser := interpreter.NewParser()
+	interpreterInterpreter := interpreter.NewInterpreter(tokenizer, parser)
+	return interpreterInterpreter, nil
 }

@@ -47,7 +47,7 @@ func (t Tokenizer) Tokenize(buf []byte) ([]Token, int) {
 	return tokens, code
 }
 
-func NewTokenizer(lexemes Lexemes, errors Errors, ignore []string) Tokenizer {
+func NewTokenizer(lexemes Lexemes, errors Errors) Tokenizer {
 	return Tokenizer{
 		lexemes: lexemes,
 		errors:  errors,

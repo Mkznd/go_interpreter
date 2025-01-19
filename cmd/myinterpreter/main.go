@@ -16,7 +16,7 @@ func main() {
 
 	command := os.Args[1]
 	allowedCommands := []string{
-		"tokenize",
+		"tokenize", "parse",
 	}
 
 	if !slices.Contains(allowedCommands, command) {
@@ -24,9 +24,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	tokenizer, err := di.InitializeTokenizer()
+	interpreter, err := di.InitializeInterpreter()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error initializing the tokenizer: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error initializing the interpreter: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -39,8 +39,13 @@ func main() {
 	if len(fileContents) > 0 {
 		switch command {
 		case "tokenize":
-			tokens, code := tokenizer.Tokenize(fileContents)
-			tokenizer.Display(tokens, os.Stdout)
+			tokens, code := interpreter.Tokenize(fileContents)
+			interpreter.DisplayTokens(tokens, os.Stdout)
+			os.Exit(code)
+		case "parse":
+			tokens, code := interpreter.Tokenize(fileContents)
+			expressions := interpreter.Parse(tokens)
+			fmt.Println(expressions)
 			os.Exit(code)
 		}
 	} else {

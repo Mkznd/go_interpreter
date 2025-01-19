@@ -8,7 +8,7 @@ import (
 	"github.com/google/wire"
 )
 
-func InitializeParser() (interpreter.Tokenizer, error) {
-	wire.Build(interpreter.NewTokenizer, interpreter.NewLexemes, interpreter.NewErrors, interpreter.NewIgnoreList)
-	return interpreter.Tokenizer{}, nil
+func InitializeInterpreter() (interpreter.Interpreter, error) {
+	wire.Build(interpreter.NewInterpreter, interpreter.NewParser, interpreter.NewTokenizer, interpreter.NewLexemes, interpreter.NewErrors)
+	return interpreter.Interpreter{}, nil
 }
