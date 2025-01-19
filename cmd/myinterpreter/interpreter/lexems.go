@@ -6,43 +6,22 @@ import (
 	"strings"
 )
 
-type LexemsMap = map[string]string
-
 type Lexemes struct {
-	Lexemes LexemsMap
-	errors  Errors
-	ignore  []string
+	Lexemes       LexemesMap
+	ReservedWords LexemesMap
+	errors        Errors
+	ignore        []string
 }
 
 func NewLexemes(errors Errors, ignore []string) Lexemes {
-	m := LexemsMap{
-		"(":  "LEFT_PAREN",
-		")":  "RIGHT_PAREN",
-		"{":  "LEFT_BRACE",
-		"}":  "RIGHT_BRACE",
-		"*":  "STAR",
-		".":  "DOT",
-		",":  "COMMA",
-		"+":  "PLUS",
-		"-":  "MINUS",
-		";":  "SEMICOLON",
-		":":  "COLON",
-		"=":  "EQUAL",
-		"==": "EQUAL_EQUAL",
-		"!":  "BANG",
-		"!=": "BANG_EQUAL",
-		"<":  "LESS",
-		">":  "GREATER",
-		"<=": "LESS_EQUAL",
-		">=": "GREATER_EQUAL",
-		"/":  "SLASH",
-		"//": "COMMENT",
-	}
+	m := GetMiscLexemes()
+	reservedWords := GetReservedWords()
 
 	return Lexemes{
-		Lexemes: m,
-		errors:  errors,
-		ignore:  ignore,
+		Lexemes:       m,
+		ReservedWords: reservedWords,
+		errors:        errors,
+		ignore:        ignore,
 	}
 }
 
@@ -60,7 +39,7 @@ func NewToken(tokenType string, lexeme string, literal string) Token {
 	}
 }
 
-func (l Lexemes) ResolveLexems(line string, pos int) (Token, int, error) {
+func (l Lexemes) ResolveLexemes(line string, pos int) (Token, int, error) {
 	currentLexeme := string(line[pos])
 	whitespaces := []string{
 		" ", "\n", "\r", "\t",
@@ -118,6 +97,10 @@ func (l Lexemes) ExtractIdentifierLiteral(s string, pos int) (Token, int, error)
 		res += string(s[pos])
 	}
 
+	if idType, found := l.ReservedWords[res]; found {
+		return NewToken(idType, res, "null"), pos - 1, nil
+	}
+
 	return NewToken("IDENTIFIER", res, "null"), pos - 1, nil
 }
 
@@ -164,7 +147,7 @@ func (l Lexemes) ExtractStringLiteral(s string, pos int) (Token, int, error) {
 	return NewToken("STRING", res+"\"", strings.TrimPrefix(res, "\"")), pos, nil
 }
 
-func CountPrefixInMapKeys(m LexemsMap, prefix string) int {
+func CountPrefixInMapKeys(m LexemesMap, prefix string) int {
 	count := 0
 	for k := range m {
 		if strings.HasPrefix(k, prefix) {

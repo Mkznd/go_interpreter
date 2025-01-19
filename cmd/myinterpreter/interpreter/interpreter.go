@@ -18,7 +18,7 @@ func (p Parser) Scan(buf []byte) {
 	lines := strings.Split(string(buf[:]), "\n")
 	for i, line := range lines {
 		for pos := 0; pos < len(line); pos++ {
-			token, newPos, err := p.lexemes.ResolveLexems(line, pos)
+			token, newPos, err := p.lexemes.ResolveLexemes(line, pos)
 			pos = newPos
 			if err != nil {
 				if err.Error() == p.errors.unexpectedChar {
